@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import type { ReactNode } from 'react';
 
 import type { Bill, BillSummary } from '@/api/types';
 
@@ -8,7 +7,7 @@ import BillsScreen from '@/app/index';
 
 jest.mock('expo-router', () => ({
   Stack: { Screen: () => null },
-  Link: ({ children }: { children: ReactNode }) => children,
+  router: { push: jest.fn() },
 }));
 
 const mockGet = jest.fn();
