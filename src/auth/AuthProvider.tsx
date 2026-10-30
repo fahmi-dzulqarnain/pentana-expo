@@ -37,7 +37,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    tokenStore.read().then(saved => setToken(saved));
+    // If storage can't be read, start signed out rather than stuck on the loading screen.
+    tokenStore
+      .read()
+      .catch(() => null)
+      .then(saved => setToken(saved));
   }, []);
 
   const signIn = useCallback(

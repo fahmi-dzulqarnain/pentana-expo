@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { Bill } from '@/api/types';
@@ -10,17 +10,20 @@ import { StatusBadge } from './StatusBadge';
 export function BillRow({ bill }: { bill: Bill }) {
   const settled = bill.status === 'paid';
   return (
-    <Link href={{ pathname: '/bills/[id]', params: { id: bill.id } }} asChild>
-      <Pressable accessibilityRole="button" style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
-        <View style={styles.left}>
-          <Text style={styles.month}>{formatMonth(bill.month)}</Text>
-          <StatusBadge status={bill.status} />
-        </View>
-        <Text style={[styles.amount, settled && styles.settled]}>
-          {formatMoney(settled ? bill.amount_due : bill.outstanding)}
-        </Text>
-      </Pressable>
-    </Link>
+    // router.push rather than <Link asChild>: Link drops Pressable's style function on web.
+    <Pressable
+      accessibilityRole="button"
+      onPress={() => router.push({ pathname: '/bills/[id]', params: { id: bill.id } })}
+      style={({ pressed }) => [styles.row, pressed && styles.pressed]}
+    >
+      <View style={styles.left}>
+        <Text style={styles.month}>{formatMonth(bill.month)}</Text>
+        <StatusBadge status={bill.status} />
+      </View>
+      <Text style={[styles.amount, settled && styles.settled]}>
+        {formatMoney(settled ? bill.amount_due : bill.outstanding)}
+      </Text>
+    </Pressable>
   );
 }
 
