@@ -24,9 +24,9 @@ export default function BillDetailScreen() {
         <Text style={styles.big}>{formatMoney(bill.outstanding)}</Text>
       </View>
       <View style={styles.card}>
-        <Row label="Amount due" value={formatMoney(bill.amount_due)} />
+        <Row label="Amount due" value={formatMoney(bill.amountDue)} />
         <View style={styles.divider} />
-        <Row label="Paid so far" value={formatMoney(bill.amount_paid)} />
+        <Row label="Paid so far" value={formatMoney(bill.amountPaid)} />
         <View style={styles.divider} />
         <Row label="Outstanding" value={formatMoney(bill.outstanding)} strong />
       </View>

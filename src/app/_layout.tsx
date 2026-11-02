@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { AuthProvider, useAuth } from '@/auth/AuthProvider';
 import { Loading } from '@/components/ScreenState';
 import { colors } from '@/components/theme';
+import { RepositoriesProvider } from '@/di/RepositoriesProvider';
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient({ defaultOptions: { queries: { staleTime: 60_000, retry: 1 } } }));
@@ -13,8 +14,10 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <StatusBar style="auto" />
-        <RootStack />
+        <RepositoriesProvider>
+          <StatusBar style="auto" />
+          <RootStack />
+        </RepositoriesProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

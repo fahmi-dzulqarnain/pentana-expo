@@ -1,12 +1,19 @@
 import { Stack } from 'expo-router';
-import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { FlatList, type ListRenderItem, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
 import { useAuth } from '@/auth/AuthProvider';
 import { EmptyState, ErrorState, Loading } from '@/components/ScreenState';
 import { colors } from '@/components/theme';
+import type { Bill, BillSummary } from '@/domain/bill';
 import { BillRow } from '@/features/bills/BillRow';
 import { formatMoney } from '@/features/bills/format';
 import { useBills, useBillSummary } from '@/features/bills/hooks';
+
+// Defined once at module level, so FlatList gets the same functions on every render.
+const keyExtractor = (bill: Bill) => String(bill.id);
+const renderItem: ListRenderItem<Bill> = ({ item }) => <BillRow bill={item} />;
+const Separator = () => <View style={styles.separator} />;
+const Empty = <EmptyState title="No bills yet" body="Your monthly bills will appear here." />;
 
 export default function BillsScreen() {
   const { signOut } = useAuth();
@@ -37,26 +44,28 @@ export default function BillsScreen() {
       ) : (
         <FlatList
           data={bills.data}
-          keyExtractor={bill => String(bill.id)}
-          renderItem={({ item }) => <BillRow bill={item} />}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ItemSeparatorComponent={Separator}
+          ListHeaderComponent={summary.data && <SummaryCard summary={summary.data} />}
+          ListEmptyComponent={Empty}
           contentContainerStyle={styles.list}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.primary} />}
-          ListHeaderComponent={
-            summary.data && (
-              <View style={styles.summary}>
-                <Text style={styles.summaryLabel}>Outstanding</Text>
-                <Text style={styles.summaryAmount}>{formatMoney(summary.data.total_outstanding)}</Text>
-                <Text style={styles.summaryMeta}>
-                  {summary.data.unpaid_count} unpaid of {summary.data.bill_count} · credit {formatMoney(summary.data.available_credit)}
-                </Text>
-              </View>
-            )
-          }
-          ListEmptyComponent={<EmptyState title="No bills yet" body="Your monthly bills will appear here." />}
         />
       )}
     </>
+  );
+}
+
+function SummaryCard({ summary }: { summary: BillSummary }) {
+  return (
+    <View style={styles.summary}>
+      <Text style={styles.summaryLabel}>Outstanding</Text>
+      <Text style={styles.summaryAmount}>{formatMoney(summary.totalOutstanding)}</Text>
+      <Text style={styles.summaryMeta}>
+        {summary.unpaidCount} unpaid of {summary.billCount} · credit {formatMoney(summary.availableCredit)}
+      </Text>
+    </View>
   );
 }
 

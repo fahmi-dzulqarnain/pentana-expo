@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#1F6F5C",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -28,6 +28,9 @@
       "expo-status-bar",
       "expo-secure-store"
     ],
-    "scheme": "pentana"
+    "scheme": "pentana",
+    "experiments": {
+      "reactCompiler": true
+    }
   }
 }
