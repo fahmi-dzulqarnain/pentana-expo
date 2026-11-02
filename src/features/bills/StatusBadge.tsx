@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import type { BillStatus } from '@/api/types';
 import { colors } from '@/components/theme';
+import type { BillStatus } from '@/domain/bill';
 
 import { statusLabel } from './format';
 
 export function StatusBadge({ status }: { status: BillStatus }) {
-  const tone = colors.status[status] ?? colors.status.pending;
+  const tone = colors.status[status];
   return (
     <View style={[styles.badge, { backgroundColor: tone.bg }]}>
-      <Text style={[styles.text, { color: tone.fg }]}>{statusLabel[status] ?? status}</Text>
+      <Text style={[styles.text, { color: tone.fg }]}>{statusLabel[status]}</Text>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-// Shapes returned by the PENTANA API. Money arrives as fixed 2-dp strings to avoid float drift.
+// Auth payloads from the PENTANA API. Bill payloads live with their mapper in `data/`.
 
 export type User = {
   id: number;
@@ -12,25 +12,6 @@ export type User = {
 };
 
 export type LoginResponse = { token: string; user: User };
-
-export type BillStatus = 'paid' | 'partial' | 'unpaid' | 'pending';
-
-export type Bill = {
-  id: number;
-  /** `YYYY-MM` */
-  month: string;
-  amount_due: string;
-  amount_paid: string;
-  outstanding: string;
-  status: BillStatus;
-};
-
-export type BillSummary = {
-  total_outstanding: string;
-  available_credit: string;
-  unpaid_count: number;
-  bill_count: number;
-};
 
 /** Laravel resource collections wrap their payload in `data`. */
 export type Wrapped<T> = { data: T };

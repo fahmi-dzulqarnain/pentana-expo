@@ -42,3 +42,8 @@ yarn-error.*
 
 # local env
 .env
+
+# Local agent instructions (kept out of the repo)
+AGENTS.md
+CLAUDE.md
+.claude/
